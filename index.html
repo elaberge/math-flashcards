@@ -14,23 +14,83 @@
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       overflow: hidden;
+      margin: 0;
+    }
+    #flashcard {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+      background-color: white;
+      transition: all 0.3s;
+    }
+    .number-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 80%;
+      text-align: right;
+    }
+    .number {
+      font-size: 20vh;
+      color: #4f46e5;
+      font-weight: bold;
+    }
+    .operator-num {
+      display: flex;
+      align-items: baseline;
+    }
+    #operator {
+      font-size: 15vh;
+      color: #4f46e5;
+      font-weight: bold;
+      margin-left: 2vw;
+    }
+    #num2 {
+      font-size: 20vh;
+      color: #4f46e5;
+      font-weight: bold;
+    }
+    .answer-container {
+      height: 15vh;
+      display: flex;
+      justify-content: flex-end;
+      width: 80%;
+      text-align: right;
+    }
+    #answer {
+      font-size: 15vh;
+      color: #818cf8;
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-indigo-100">
-  <div id="flashcard" class="w-full h-screen flex flex-col items-center justify-center text-center bg-white text-6xl font-bold text-indigo-600 select-none transition-all duration-300">
-    <div id="problem">3 × 4</div>
-    <div id="answer" class="hidden text-4xl text-indigo-400 mt-4">12</div>
+<body class="bg-indigo-100">
+  <div id="flashcard" class="w-full h-screen flex flex-col items-center justify-around text-center select-none transition-all duration-300">
+    <div class="number-group">
+      <div id="num1" class="number"></div>
+      <div class="operator-num">
+        <div id="operator">×</div>
+        <div id="num2" class="number"></div>
+      </div>
+    </div>
+    <div class="answer-container">
+      <div id="answer" class="hidden"></div>
+    </div>
   </div>
   <script>
-    const problemEl = document.getElementById('problem');
+    const num1El = document.getElementById('num1');
+    const num2El = document.getElementById('num2');
+    const operatorEl = document.getElementById('operator');
     const answerEl = document.getElementById('answer');
     let isAnswerShown = false;
 
     function generateCard() {
       const num1 = Math.floor(Math.random() * 10);
       const num2 = Math.floor(Math.random() * 10);
-      problemEl.textContent = `${num1} × ${num2}`;
+      num1El.textContent = num1;
+      num2El.textContent = num2;
       answerEl.textContent = num1 * num2;
       answerEl.classList.add('hidden');
       isAnswerShown = false;
@@ -50,15 +110,14 @@
       toggleAnswer();
     });
 
-    // Prevent double-tap zoom
     document.addEventListener('touchend', (e) => {
       e.preventDefault();
     });
 
-    // Initialize first card
+    document.addEventListener('click', toggleAnswer);
+
     generateCard();
 
-    // Register service worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(err => console.error('Service Worker registration failed:', err));
