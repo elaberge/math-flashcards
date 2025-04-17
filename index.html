@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4f46e5">
+  <title>Multiplication Flash Cards</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-indigo-100">
+  <div id="flashcard" class="w-full h-screen flex flex-col items-center justify-center text-center bg-white text-6xl font-bold text-indigo-600 select-none transition-all duration-300">
+    <div id="problem">3 × 4</div>
+    <div id="answer" class="hidden text-4xl text-indigo-400 mt-4">12</div>
+  </div>
+  <script>
+    const problemEl = document.getElementById('problem');
+    const answerEl = document.getElementById('answer');
+    let isAnswerShown = false;
+
+    function generateCard() {
+      const num1 = Math.floor(Math.random() * 10);
+      const num2 = Math.floor(Math.random() * 10);
+      problemEl.textContent = `${num1} × ${num2}`;
+      answerEl.textContent = num1 * num2;
+      answerEl.classList.add('hidden');
+      isAnswerShown = false;
+    }
+
+    function toggleAnswer() {
+      if (isAnswerShown) {
+        generateCard();
+      } else {
+        answerEl.classList.remove('hidden');
+        isAnswerShown = true;
+      }
+    }
+
+    document.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      toggleAnswer();
+    });
+
+    // Prevent double-tap zoom
+    document.addEventListener('touchend', (e) => {
+      e.preventDefault();
+    });
+
+    // Initialize first card
+    generateCard();
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

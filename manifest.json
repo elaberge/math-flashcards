@@ -1,0 +1,16 @@
+{
+  "name": "Multiplication Flash Cards",
+  "short_name": "Flash Cards",
+  "description": "A PWA for practicing single-digit multiplication",
+  "start_url": "/math-flashcards/",
+  "display": "fullscreen",
+  "background_color": "#4f46e5",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
